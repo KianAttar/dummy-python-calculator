@@ -3,6 +3,8 @@
 from PySide6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout
 from PySide6.QtCore import Qt
 import sys
+from gui.display import Display
+from gui.buttons import ButtonGrid
 
 
 class CalculatorWindow(QMainWindow):
@@ -12,7 +14,7 @@ class CalculatorWindow(QMainWindow):
         """Initialize the calculator window."""
         super().__init__()
         self.setWindowTitle("Calculator")
-        self.setFixedSize(400, 600)
+        self.setFixedSize(420, 650)
         
         # Create central widget
         central_widget = QWidget()
@@ -20,15 +22,25 @@ class CalculatorWindow(QMainWindow):
         
         # Create main layout
         layout = QVBoxLayout()
+        layout.setSpacing(10)
+        layout.setContentsMargins(10, 10, 10, 10)
         central_widget.setLayout(layout)
         
-        # Placeholder for now
-        self.setup_ui()
+        # Setup UI components
+        self.setup_ui(layout)
     
-    def setup_ui(self):
+    def setup_ui(self, layout):
         """Setup the user interface."""
-        # Will be implemented in next commits
-        pass
+        # Create display
+        self.display = Display()
+        layout.addWidget(self.display)
+        
+        # Create button grid
+        self.button_grid = ButtonGrid()
+        layout.addWidget(self.button_grid)
+        
+        # Placeholder for signal connections - will be implemented next
+        # self.connect_signals()
 
 
 def run_gui():
