@@ -77,6 +77,39 @@ class CalculatorWindow(QMainWindow):
         elif function == '%':
             result = self.calc_logic.handle_percent()
             self.display.set_value(result)
+    
+    def keyPressEvent(self, event):
+        """Handle keyboard input."""
+        key = event.text()
+        
+        # Handle digits
+        if key.isdigit():
+            self.on_digit_clicked(key)
+        # Handle decimal
+        elif key == '.':
+            self.on_digit_clicked('.')
+        # Handle operators
+        elif key == '+':
+            self.on_operator_clicked('+')
+        elif key == '-':
+            self.on_operator_clicked('-')
+        elif key == '*':
+            self.on_operator_clicked('×')
+        elif key == '/':
+            self.on_operator_clicked('÷')
+        elif key in ('=', '\r', '\n'):  # Enter key
+            self.on_operator_clicked('=')
+        # Handle functions
+        elif key.lower() == 'c':
+            self.on_function_clicked('C')
+        elif event.key() == Qt.Key_Backspace:
+            self.on_function_clicked('⌫')
+        elif event.key() == Qt.Key_Escape:
+            self.on_function_clicked('C')
+        elif key == '%':
+            self.on_function_clicked('%')
+        else:
+            super().keyPressEvent(event)
 
 
 def run_gui():
