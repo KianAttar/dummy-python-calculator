@@ -3,6 +3,9 @@
 import argparse
 import sys
 from calculator import Calculator, validate_number
+from calculator.scientific import (
+    sin, cos, tan, log, ln, exp, sqrt, power, PI, E
+)
 
 
 def run_interactive():
@@ -66,17 +69,81 @@ def run_interactive():
                     print(f"Result: {result}")
                 except (IndexError, ValueError, ZeroDivisionError) as e:
                     print(f"Error: {e}")
+            elif command.startswith('pow '):
+                try:
+                    value = validate_number(command.split()[1])
+                    result = power(calc.get_value(), value)
+                    calc.set_value(result)
+                    print(f"Result: {result}")
+                except (IndexError, ValueError) as e:
+                    print(f"Error: {e}")
+            elif command == 'sqrt':
+                try:
+                    result = sqrt(calc.get_value())
+                    calc.set_value(result)
+                    print(f"Result: {result}")
+                except ValueError as e:
+                    print(f"Error: {e}")
+            elif command == 'sin':
+                result = sin(calc.get_value())
+                calc.set_value(result)
+                print(f"Result: {result}")
+            elif command == 'cos':
+                result = cos(calc.get_value())
+                calc.set_value(result)
+                print(f"Result: {result}")
+            elif command == 'tan':
+                result = tan(calc.get_value())
+                calc.set_value(result)
+                print(f"Result: {result}")
+            elif command == 'log':
+                try:
+                    result = log(calc.get_value())
+                    calc.set_value(result)
+                    print(f"Result: {result}")
+                except ValueError as e:
+                    print(f"Error: {e}")
+            elif command == 'ln':
+                try:
+                    result = ln(calc.get_value())
+                    calc.set_value(result)
+                    print(f"Result: {result}")
+                except ValueError as e:
+                    print(f"Error: {e}")
+            elif command == 'exp':
+                result = exp(calc.get_value())
+                calc.set_value(result)
+                print(f"Result: {result}")
+            elif command == 'pi':
+                calc.set_value(PI)
+                print(f"Value set to π: {PI}")
+            elif command == 'e':
+                calc.set_value(E)
+                print(f"Value set to e: {E}")
             elif command == 'help':
                 print("Available commands:")
-                print("  add <number>  - Add number to current value")
-                print("  sub <number>  - Subtract number from current value")
-                print("  mul <number>  - Multiply current value by number")
-                print("  div <number>  - Divide current value by number")
-                print("  set <number>  - Set current value")
-                print("  value         - Show current value")
-                print("  clear         - Clear value and history")
-                print("  history       - Show calculation history")
-                print("  quit/exit     - Exit calculator")
+                print("  Basic operations:")
+                print("    add <number>  - Add number to current value")
+                print("    sub <number>  - Subtract number from current value")
+                print("    mul <number>  - Multiply current value by number")
+                print("    div <number>  - Divide current value by number")
+                print("  Scientific operations:")
+                print("    sin           - Sine of current value (degrees)")
+                print("    cos           - Cosine of current value (degrees)")
+                print("    tan           - Tangent of current value (degrees)")
+                print("    log           - Log base 10 of current value")
+                print("    ln            - Natural log of current value")
+                print("    exp           - e raised to current value")
+                print("    sqrt          - Square root of current value")
+                print("    pow <number>  - Raise current value to power")
+                print("    pi            - Set value to π")
+                print("    e             - Set value to e")
+                print("  General:")
+                print("    set <number>  - Set current value")
+                print("    value         - Show current value")
+                print("    clear         - Clear value and history")
+                print("    history       - Show calculation history")
+                print("    quit/exit     - Exit calculator")
             else:
                 print("Unknown command. Type 'help' for available commands.")
         except KeyboardInterrupt:
