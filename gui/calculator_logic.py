@@ -1,6 +1,11 @@
 """Calculator logic handler for GUI."""
 
 from calculator import Calculator
+from calculator.scientific import (
+    sin, cos, tan, asin, acos, atan,
+    log, ln, exp, power, sqrt, cbrt, factorial,
+    PI, E
+)
 
 
 class CalculatorLogic:
@@ -171,4 +176,67 @@ class CalculatorLogic:
             list: History of calculations
         """
         return self.calculator.get_history()
+    
+    def handle_scientific_function(self, func_name):
+        """Handle scientific function.
+        
+        Args:
+            func_name: Name of the scientific function
+            
+        Returns:
+            str: The result to display
+        """
+        try:
+            value = float(self.current_input) if self.current_input else 0
+            
+            if func_name == 'sin':
+                result = sin(value)
+            elif func_name == 'cos':
+                result = cos(value)
+            elif func_name == 'tan':
+                result = tan(value)
+            elif func_name == 'asin':
+                result = asin(value)
+            elif func_name == 'acos':
+                result = acos(value)
+            elif func_name == 'atan':
+                result = atan(value)
+            elif func_name == 'log':
+                result = log(value)
+            elif func_name == 'ln':
+                result = ln(value)
+            elif func_name == 'exp':
+                result = exp(value)
+            elif func_name == 'sqrt':
+                result = sqrt(value)
+            elif func_name == 'cbrt':
+                result = cbrt(value)
+            elif func_name == 'x²':
+                result = power(value, 2)
+            elif func_name == 'x³':
+                result = power(value, 3)
+            elif func_name == '1/x':
+                result = 1 / value
+            elif func_name == 'π':
+                result = PI
+                self.waiting_for_operand = False
+            elif func_name == 'e':
+                result = E
+                self.waiting_for_operand = False
+            elif func_name == 'n!':
+                result = factorial(value)
+            else:
+                return self.current_input
+            
+            # Format result
+            if isinstance(result, float) and result.is_integer():
+                self.current_input = str(int(result))
+            else:
+                self.current_input = f"{result:.10g}"
+            
+            self.waiting_for_operand = True
+            return self.current_input
+            
+        except (ValueError, ZeroDivisionError, OverflowError) as e:
+            return "Error"
 
