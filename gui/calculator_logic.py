@@ -92,18 +92,24 @@ class CalculatorLogic:
         """
         self.calculator.set_value(left)
         
-        if operator == '+':
-            return self.calculator.add(right)
-        elif operator == '-':
-            return self.calculator.subtract(right)
-        elif operator == '×' or operator == '*':
-            return self.calculator.multiply(right)
-        elif operator == '÷' or operator == '/':
-            try:
-                return self.calculator.divide(right)
-            except ValueError:
-                return "Error"
-        return left
+        try:
+            if operator == '+':
+                result = self.calculator.add(right)
+            elif operator == '-':
+                result = self.calculator.subtract(right)
+            elif operator == '×' or operator == '*':
+                result = self.calculator.multiply(right)
+            elif operator == '÷' or operator == '/':
+                result = self.calculator.divide(right)
+            else:
+                return left
+            
+            # Format result nicely
+            if isinstance(result, float) and result.is_integer():
+                return int(result)
+            return result
+        except (ValueError, ZeroDivisionError):
+            return "Error"
     
     def handle_clear(self):
         """Handle clear operation.
