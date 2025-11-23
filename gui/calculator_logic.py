@@ -6,6 +6,12 @@ from calculator.scientific import (
     log, ln, exp, power, sqrt, cbrt, factorial,
     PI, E
 )
+from calculator.programmer import (
+    to_binary, to_octal, to_hexadecimal,
+    from_binary, from_octal, from_hexadecimal,
+    bitwise_and, bitwise_or, bitwise_xor, bitwise_not,
+    left_shift, right_shift
+)
 
 
 class CalculatorLogic:
@@ -238,5 +244,73 @@ class CalculatorLogic:
             return self.current_input
             
         except (ValueError, ZeroDivisionError, OverflowError) as e:
+            return "Error"
+    
+    def handle_base_conversion(self, target_base):
+        """Handle base conversion.
+        
+        Args:
+            target_base: Target base (2, 8, 10, 16)
+            
+        Returns:
+            str: The converted value
+        """
+        try:
+            # Assume current input is in decimal
+            value = int(float(self.current_input))
+            
+            if target_base == 2:
+                result = to_binary(value)
+                self.current_input = result
+            elif target_base == 8:
+                result = to_octal(value)
+                self.current_input = result
+            elif target_base == 16:
+                result = to_hexadecimal(value)
+                self.current_input = result
+            else:
+                result = str(value)
+                self.current_input = result
+            
+            return self.current_input
+        except (ValueError, OverflowError) as e:
+            return "Error"
+    
+    def handle_bitwise_operation(self, operation, operand=None):
+        """Handle bitwise operations.
+        
+        Args:
+            operation: The bitwise operation (AND, OR, XOR, NOT, <<, >>)
+            operand: The second operand (if needed)
+            
+        Returns:
+            str: The result to display
+        """
+        try:
+            value = int(float(self.current_input)) if self.current_input else 0
+            
+            if operation == 'NOT':
+                result = bitwise_not(value)
+            elif operand is not None:
+                if operation == 'AND':
+                    result = bitwise_and(value, operand)
+                elif operation == 'OR':
+                    result = bitwise_or(value, operand)
+                elif operation == 'XOR':
+                    result = bitwise_xor(value, operand)
+                elif operation == '<<':
+                    result = left_shift(value, operand)
+                elif operation == '>>':
+                    result = right_shift(value, operand)
+                else:
+                    return self.current_input
+            else:
+                return self.current_input
+            
+            self.current_input = str(result)
+            self.waiting_for_operand = True
+            return self.current_input
+            
+        except (ValueError, OverflowError) as e:
             return "Error"
 
