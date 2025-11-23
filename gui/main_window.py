@@ -10,6 +10,7 @@ from gui.display import Display
 from gui.buttons import ButtonGrid
 from gui.calculator_logic import CalculatorLogic
 from gui.scientific_panel import ScientificPanel
+from gui.programmer_panel import ProgrammerPanel
 
 
 class CalculatorWindow(QMainWindow):
@@ -23,8 +24,8 @@ class CalculatorWindow(QMainWindow):
         # Initialize calculator logic
         self.calc_logic = CalculatorLogic()
         
-        # Mode state
-        self.scientific_mode = False
+        # Mode state (0=basic, 1=scientific, 2=programmer)
+        self.current_mode = 0
         
         # Create central widget
         central_widget = QWidget()
@@ -45,11 +46,16 @@ class CalculatorWindow(QMainWindow):
     
     def setup_ui(self, layout):
         """Setup the user interface."""
-        # Create mode toggle button
-        self.mode_button = QPushButton("Scientific Mode")
-        self.mode_button.setCheckable(True)
-        self.mode_button.clicked.connect(self.toggle_mode)
-        self.mode_button.setStyleSheet("""
+        # Create mode toggle buttons
+        mode_layout = QHBoxLayout()
+        
+        self.mode_button = QPushButton("Scientific")
+        self.mode_button.clicked.connect(lambda: self.set_mode(1))
+        
+        self.programmer_button = QPushButton("Programmer")
+        self.programmer_button.clicked.connect(lambda: self.set_mode(2))
+        
+        button_style = """
             QPushButton {
                 background-color: #4CAF50;
                 color: white;
@@ -58,14 +64,16 @@ class CalculatorWindow(QMainWindow):
                 border-radius: 5px;
                 font-weight: bold;
             }
-            QPushButton:checked {
-                background-color: #2196F3;
-            }
             QPushButton:hover {
                 background-color: #45a049;
             }
-        """)
-        layout.addWidget(self.mode_button)
+        """
+        self.mode_button.setStyleSheet(button_style)
+        self.programmer_button.setStyleSheet(button_style)
+        
+        mode_layout.addWidget(self.mode_button)
+        mode_layout.addWidget(self.programmer_button)
+        layout.addLayout(mode_layout)
         
         # Create display
         self.display = Display()
@@ -75,6 +83,11 @@ class CalculatorWindow(QMainWindow):
         self.scientific_panel = ScientificPanel()
         self.scientific_panel.setVisible(False)
         layout.addWidget(self.scientific_panel)
+        
+        # Create programmer panel (hidden by default)
+        self.programmer_panel = ProgrammerPanel()
+        self.programmer_panel.setVisible(False)
+        layout.addWidget(self.programmer_panel)
         
         # Create button grid
         self.button_grid = ButtonGrid()
@@ -86,16 +99,26 @@ class CalculatorWindow(QMainWindow):
         self.button_grid.operator_clicked.connect(self.on_operator_clicked)
         self.button_grid.function_clicked.connect(self.on_function_clicked)
         self.scientific_panel.scientific_clicked.connect(self.on_scientific_clicked)
+        self.programmer_panel.bitwise_clicked.connect(self.on_bitwise_clicked)
+        self.programmer_panel.base_conversion_clicked.connect(self.on_base_conversion)
     
-    def toggle_mode(self):
-        """Toggle between basic and scientific modes."""
-        self.scientific_mode = not self.scientific_mode
-        self.scientific_panel.setVisible(self.scientific_mode)
+    def set_mode(self, mode):
+        """Set calculator mode.
         
-        if self.scientific_mode:
-            self.mode_button.setText("Basic Mode")
-        else:
-            self.mode_button.setText("Scientific Mode")
+        Args:
+            mode: 0=basic, 1=scientific, 2=programmer
+        """
+        self.current_mode = mode
+        
+        # Hide all extra panels
+        self.scientific_panel.setVisible(False)
+        self.programmer_panel.setVisible(False)
+        
+        # Show the appropriate panel
+        if mode == 1:
+            self.scientific_panel.setVisible(True)
+        elif mode == 2:
+            self.programmer_panel.setVisible(True)
         
         # Adjust window size
         self.adjustSize()
@@ -104,6 +127,28 @@ class CalculatorWindow(QMainWindow):
         """Handle scientific function button clicks."""
         result = self.calc_logic.handle_scientific_function(function)
         self.display.set_value(result)
+    
+    def on_bitwise_clicked(self, operation):
+        """Handle bitwise operation button clicks."""
+        # For now, handle NOT directly, others would need second operand
+        if operation == 'NOT':
+            result = self.calc_logic.handle_bitwise_operation('NOT')
+            self.display.set_value(result)
+        # TODO: For AND, OR, XOR, <<, >> - need to implement two-operand logic
+    
+    def on_base_conversion(self, base):
+        """Handle base conversion button clicks."""
+        result = self.calc_logic.handle_base_conversion(base)
+        self.display.set_value(result)
+        
+        # Update programmer panel base displays
+        if self.current_mode == 2:
+            try:
+                self.programmer_panel.update_base_displays(
+                    self.calc_logic.current_input
+                )
+            except:
+                pass
     
     def on_digit_clicked(self, digit):
         """Handle digit button clicks."""
