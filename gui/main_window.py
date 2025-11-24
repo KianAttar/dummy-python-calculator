@@ -11,6 +11,7 @@ from gui.buttons import ButtonGrid
 from gui.calculator_logic import CalculatorLogic
 from gui.scientific_panel import ScientificPanel
 from gui.programmer_panel import ProgrammerPanel
+from gui.history_panel import HistoryPanel
 
 
 class CalculatorWindow(QMainWindow):
@@ -31,14 +32,24 @@ class CalculatorWindow(QMainWindow):
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
         
-        # Create main layout
-        layout = QVBoxLayout()
-        layout.setSpacing(10)
-        layout.setContentsMargins(10, 10, 10, 10)
-        central_widget.setLayout(layout)
+        # Create main layout - horizontal to accommodate history panel
+        main_layout = QHBoxLayout()
+        main_layout.setSpacing(10)
+        main_layout.setContentsMargins(10, 10, 10, 10)
+        central_widget.setLayout(main_layout)
+        
+        # Calculator area (left side)
+        calc_layout = QVBoxLayout()
+        calc_layout.setSpacing(10)
+        main_layout.addLayout(calc_layout, stretch=2)
+        
+        # History panel (right side)
+        self.history_panel = HistoryPanel()
+        self.history_panel.setMaximumWidth(250)
+        main_layout.addWidget(self.history_panel, stretch=1)
         
         # Setup UI components
-        self.setup_ui(layout)
+        self.setup_ui(calc_layout)
         self.connect_signals()
         
         # Set initial size
@@ -160,8 +171,15 @@ class CalculatorWindow(QMainWindow):
     
     def on_operator_clicked(self, operator):
         """Handle operator button clicks."""
+        prev_value = self.calc_logic.current_input
         result = self.calc_logic.handle_operator(operator)
         self.display.set_value(result)
+        
+        # Add to history when equals is pressed
+        if operator == '=' and prev_value:
+            history = self.calc_logic.get_history()
+            if history:
+                self.history_panel.add_history_item(history[-1])
     
     def on_function_clicked(self, function):
         """Handle function button clicks."""
