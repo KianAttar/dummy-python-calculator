@@ -6,6 +6,11 @@ from calculator import Calculator, validate_number
 from calculator.scientific import (
     sin, cos, tan, log, ln, exp, sqrt, power, PI, E
 )
+from calculator.programmer import (
+    to_binary, to_octal, to_hexadecimal,
+    from_binary, from_octal, from_hexadecimal,
+    bitwise_and, bitwise_or, bitwise_xor, bitwise_not
+)
 
 
 def run_interactive():
@@ -120,6 +125,55 @@ def run_interactive():
             elif command == 'e':
                 calc.set_value(E)
                 print(f"Value set to e: {E}")
+            elif command == 'bin':
+                try:
+                    value = int(calc.get_value())
+                    result = to_binary(value)
+                    print(f"Binary: {result}")
+                except ValueError as e:
+                    print(f"Error: {e}")
+            elif command == 'oct':
+                try:
+                    value = int(calc.get_value())
+                    result = to_octal(value)
+                    print(f"Octal: {result}")
+                except ValueError as e:
+                    print(f"Error: {e}")
+            elif command == 'hex':
+                try:
+                    value = int(calc.get_value())
+                    result = to_hexadecimal(value)
+                    print(f"Hexadecimal: {result}")
+                except ValueError as e:
+                    print(f"Error: {e}")
+            elif command.startswith('and '):
+                try:
+                    value = validate_number(command.split()[1])
+                    result = bitwise_and(calc.get_value(), value)
+                    calc.set_value(result)
+                    print(f"Result: {result}")
+                except (IndexError, ValueError) as e:
+                    print(f"Error: {e}")
+            elif command.startswith('or '):
+                try:
+                    value = validate_number(command.split()[1])
+                    result = bitwise_or(calc.get_value(), value)
+                    calc.set_value(result)
+                    print(f"Result: {result}")
+                except (IndexError, ValueError) as e:
+                    print(f"Error: {e}")
+            elif command.startswith('xor '):
+                try:
+                    value = validate_number(command.split()[1])
+                    result = bitwise_xor(calc.get_value(), value)
+                    calc.set_value(result)
+                    print(f"Result: {result}")
+                except (IndexError, ValueError) as e:
+                    print(f"Error: {e}")
+            elif command == 'not':
+                result = bitwise_not(int(calc.get_value()))
+                calc.set_value(result)
+                print(f"Result: {result}")
             elif command == 'help':
                 print("Available commands:")
                 print("  Basic operations:")
@@ -138,6 +192,14 @@ def run_interactive():
                 print("    pow <number>  - Raise current value to power")
                 print("    pi            - Set value to π")
                 print("    e             - Set value to e")
+                print("  Programmer operations:")
+                print("    bin           - Show current value in binary")
+                print("    oct           - Show current value in octal")
+                print("    hex           - Show current value in hexadecimal")
+                print("    and <number>  - Bitwise AND with number")
+                print("    or <number>   - Bitwise OR with number")
+                print("    xor <number>  - Bitwise XOR with number")
+                print("    not           - Bitwise NOT of current value")
                 print("  General:")
                 print("    set <number>  - Set current value")
                 print("    value         - Show current value")
