@@ -67,13 +67,17 @@ class CalculatorLogic:
             str: The result to display
         """
         try:
-            current_value = float(self.current_input) if self.current_input else 0
+            # Handle edge case where input ends with decimal point
+            input_val = self.current_input.rstrip('.')
+            current_value = float(input_val) if input_val else 0
         except ValueError:
             return "Error"
         
         if self.pending_operator and not self.waiting_for_operand:
             # Perform pending operation
             result = self.perform_operation(self.pending_value, current_value, self.pending_operator)
+            if result == "Error":
+                return result
             self.calculator.set_value(result)
             self.current_input = str(result)
         else:
