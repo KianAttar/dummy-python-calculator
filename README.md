@@ -1,25 +1,232 @@
 # Python Calculator
 
-A comprehensive calculator application with GUI and CLI interfaces.
+A comprehensive calculator application with both graphical (GUI) and command-line (CLI) interfaces, supporting basic arithmetic, scientific calculations, and programmer mode operations.
 
 ## Features
 
-- Basic arithmetic operations
-- Scientific calculator mode
-- Programmer mode with base conversions
-- Both graphical and command-line interfaces
+### Calculator Modes
+
+#### Basic Mode
+- Standard arithmetic operations: addition, subtraction, multiplication, division
+- Decimal support
+- Clear and backspace functions
+- Percent calculations
+- Sign change (+/-)
+
+#### Scientific Mode
+- Trigonometric functions: sin, cos, tan, asin, acos, atan
+- Logarithmic functions: log (base 10), ln (natural log)
+- Exponential functions: exp, power (x², x³, xʸ)
+- Root functions: square root, cube root
+- Mathematical constants: π (pi), e
+- Factorial calculations
+
+#### Programmer Mode
+- Base conversions: binary, octal, decimal, hexadecimal
+- Bitwise operations: AND, OR, XOR, NOT
+- Bit shift operations: left shift (<<), right shift (>>)
+- Real-time display in multiple bases
+
+### Interface Options
+
+#### GUI (Graphical User Interface)
+- Modern, clean interface built with PySide6
+- Mode switching buttons (Basic/Scientific/Programmer)
+- Calculation history panel
+- Keyboard input support
+- Keyboard shortcuts:
+  - `Ctrl+S`: Toggle Scientific mode
+  - `Ctrl+P`: Toggle Programmer mode
+  - `Ctrl+H`: Clear history
+  - `Esc`: Clear current calculation
+
+#### CLI (Command-Line Interface)
+- Interactive mode for continuous calculations
+- Direct calculation mode for quick operations
+- Full support for all calculator modes
+- Comprehensive help system
 
 ## Installation
 
+### Prerequisites
+- Python 3.12 or higher
+- uv package manager
+
+### Setup
+
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd python-calculator
+```
+
+2. Install dependencies:
 ```bash
 uv sync
 ```
 
 ## Usage
 
-Coming soon...
+### GUI Mode (Default)
+
+Launch the calculator in GUI mode:
+```bash
+python main.py
+```
+
+Or explicitly:
+```bash
+python main.py --gui
+```
+
+### CLI Mode
+
+Launch the calculator in CLI interactive mode:
+```bash
+python main.py --cli
+```
+
+#### CLI Interactive Mode
+
+In interactive mode, you can use the following commands:
+
+**Basic Operations:**
+- `add <number>` - Add a number to current value
+- `sub <number>` - Subtract a number from current value
+- `mul <number>` - Multiply current value by a number
+- `div <number>` - Divide current value by a number
+
+**Scientific Operations:**
+- `sin` - Sine of current value (in degrees)
+- `cos` - Cosine of current value (in degrees)
+- `tan` - Tangent of current value (in degrees)
+- `log` - Log base 10 of current value
+- `ln` - Natural log of current value
+- `exp` - e raised to current value
+- `sqrt` - Square root of current value
+- `pow <number>` - Raise current value to a power
+- `pi` - Set value to π
+- `e` - Set value to e
+
+**Programmer Operations:**
+- `bin` - Show current value in binary
+- `oct` - Show current value in octal
+- `hex` - Show current value in hexadecimal
+- `and <number>` - Bitwise AND
+- `or <number>` - Bitwise OR
+- `xor <number>` - Bitwise XOR
+- `not` - Bitwise NOT
+
+**General Commands:**
+- `set <number>` - Set current value
+- `value` - Show current value
+- `clear` - Clear value and history
+- `history` - Show calculation history
+- `help` - Show available commands
+- `quit` or `exit` - Exit calculator
+
+#### CLI Direct Mode
+
+Perform a single calculation:
+```bash
+python main.py --cli add 5 3
+python main.py --cli multiply 6 7
+python main.py --cli divide 100 4
+```
+
+## Examples
+
+### GUI Examples
+
+1. Basic calculation: Launch GUI, enter numbers and operators using mouse or keyboard
+2. Scientific calculation: Click "Scientific" button, use trigonometric and logarithmic functions
+3. Programmer mode: Click "Programmer" button, convert between bases and perform bitwise operations
+
+### CLI Examples
+
+```bash
+# Interactive mode
+$ python main.py --cli
+>>> set 10
+Value set to 10
+>>> add 5
+Result: 15
+>>> sqrt
+Result: 3.872983346207417
+>>> quit
+```
+
+```bash
+# Direct calculations
+$ python main.py --cli add 10 20
+Result: 30
+
+$ python main.py --cli multiply 7 8
+Result: 56
+```
 
 ## Development
 
-This project is under active development.
+### Running Tests
 
+Run the test suite using pytest:
+```bash
+uv run pytest
+```
+
+Run tests with coverage:
+```bash
+uv run pytest --cov=calculator --cov=gui
+```
+
+### Project Structure
+
+```
+python-calculator/
+├── calculator/          # Core calculator engine
+│   ├── __init__.py
+│   ├── calculator.py   # Calculator class
+│   ├── operations.py   # Basic operations
+│   ├── scientific.py   # Scientific functions
+│   ├── programmer.py   # Programmer mode functions
+│   └── validator.py    # Input validation
+├── gui/                # GUI components
+│   ├── __init__.py
+│   ├── main_window.py  # Main window
+│   ├── display.py      # Display widget
+│   ├── buttons.py      # Button widgets
+│   ├── calculator_logic.py  # GUI calculator logic
+│   ├── scientific_panel.py  # Scientific mode panel
+│   ├── programmer_panel.py  # Programmer mode panel
+│   └── history_panel.py     # History display
+├── tests/              # Test suite
+│   ├── test_calculator.py
+│   ├── test_operations.py
+│   ├── test_scientific.py
+│   ├── test_programmer.py
+│   ├── test_validator.py
+│   └── test_memory.py
+├── main.py            # Application entry point
+├── cli.py             # CLI interface
+└── README.md          # This file
+```
+
+## Technical Details
+
+- **Language**: Python 3.12+
+- **GUI Framework**: PySide6 (Qt for Python)
+- **CLI Framework**: argparse
+- **Testing**: pytest
+- **Package Manager**: uv
+
+## License
+
+This project is open source and available under the MIT License.
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## Author
+
+Developed as a comprehensive calculator application demonstrating modern Python development practices.
