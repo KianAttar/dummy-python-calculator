@@ -199,6 +199,23 @@ class CalculatorWindow(QMainWindow):
     def keyPressEvent(self, event):
         """Handle keyboard input."""
         key = event.text()
+        key_code = event.key()
+        modifiers = event.modifiers()
+        
+        # Handle keyboard shortcuts with modifiers
+        if modifiers & Qt.ControlModifier:
+            if key.lower() == 's':
+                # Ctrl+S: Toggle scientific mode
+                self.set_mode(1 if self.current_mode != 1 else 0)
+                return
+            elif key.lower() == 'p':
+                # Ctrl+P: Toggle programmer mode
+                self.set_mode(2 if self.current_mode != 2 else 0)
+                return
+            elif key.lower() == 'h':
+                # Ctrl+H: Clear history
+                self.history_panel.clear_history()
+                return
         
         # Handle digits
         if key.isdigit():
@@ -220,12 +237,16 @@ class CalculatorWindow(QMainWindow):
         # Handle functions
         elif key.lower() == 'c':
             self.on_function_clicked('C')
-        elif event.key() == Qt.Key_Backspace:
+        elif key_code == Qt.Key_Backspace:
             self.on_function_clicked('⌫')
-        elif event.key() == Qt.Key_Escape:
+        elif key_code == Qt.Key_Escape:
             self.on_function_clicked('C')
         elif key == '%':
             self.on_function_clicked('%')
+        # Function keys for quick access
+        elif key_code == Qt.Key_F1:
+            # F1: Help (could show help dialog)
+            pass
         else:
             super().keyPressEvent(event)
 
