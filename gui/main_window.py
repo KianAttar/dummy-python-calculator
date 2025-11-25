@@ -20,7 +20,14 @@ class CalculatorWindow(QMainWindow):
     def __init__(self):
         """Initialize the calculator window."""
         super().__init__()
-        self.setWindowTitle("Calculator")
+        self.setWindowTitle("Python Calculator")
+        
+        # Set window style
+        self.setStyleSheet("""
+            QMainWindow {
+                background-color: #f5f5f5;
+            }
+        """)
         
         # Initialize calculator logic
         self.calc_logic = CalculatorLogic()
