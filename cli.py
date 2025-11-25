@@ -16,9 +16,11 @@ from calculator.programmer import (
 def run_interactive():
     """Run calculator in interactive mode."""
     calc = Calculator()
-    print("Calculator CLI - Interactive Mode")
-    print("Commands: add, sub, mul, div, clear, history, value, set, quit")
-    print("-" * 50)
+    print("=" * 60)
+    print("Python Calculator - Interactive CLI Mode")
+    print("=" * 60)
+    print("Type 'help' for available commands, 'quit' to exit")
+    print("-" * 60)
     
     while True:
         try:
