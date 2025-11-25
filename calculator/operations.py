@@ -17,8 +17,19 @@ def multiply(a, b):
 
 
 def divide(a, b):
-    """Divide a by b."""
+    """Divide a by b.
+    
+    Args:
+        a: Dividend
+        b: Divisor
+        
+    Returns:
+        float: Result of a / b
+        
+    Raises:
+        ValueError: If b is zero
+    """
     if b == 0:
-        raise ValueError("Cannot divide by zero")
+        raise ValueError("Division by zero")
     return a / b
 
