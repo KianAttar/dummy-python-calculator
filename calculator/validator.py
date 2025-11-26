@@ -1,4 +1,8 @@
-"""Input validation utilities for calculator."""
+"""Input validation utilities for calculator.
+
+This module provides validation functions to ensure calculator inputs
+are properly formatted and within acceptable ranges.
+"""
 
 
 def validate_number(value):
@@ -13,8 +17,15 @@ def validate_number(value):
     Raises:
         ValueError: If the value cannot be converted to a number
     """
+    if value is None:
+        raise ValueError("Value cannot be None")
+    
     try:
-        return float(value)
+        result = float(value)
+        # Check for infinity and NaN
+        if not (-1e308 <= result <= 1e308):
+            raise ValueError(f"Number out of range: {value}")
+        return result
     except (ValueError, TypeError):
         raise ValueError(f"Invalid number: {value}")
 
